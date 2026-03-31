@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JSP collection</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+/* HIDE SCROLLBAR */
+body::-webkit-scrollbar{display:none;}
+body{ -ms-overflow-style:none; scrollbar-width:none; }
+
+/* NAVBAR */
+.navbar{
+    position:absolute;
+    top:0;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:flex-end; /* 🔥 logo remove ke baad right align */
+    padding:15px 20px;
+    background:transparent;
+    z-index:1000;
+}
+
+/* NAV LINKS */
+.nav-links{
+    display:flex;
+    gap:25px;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:white;
+    font-weight:500;
+}
+
+/* SEARCH */
+.search{
+    color:white;
+    font-size:20px;
+    cursor:pointer;
+}
+
+/* MOBILE MENU ICON */
+.menu-toggle{
+    display:none;
+    font-size:22px;
+    color:white;
+    cursor:pointer;
+}
+
+/* MOBILE MENU */
+.mobile-menu{
+    position:fixed;
+    top:0;
+    right:-100%;
+    width:70%;
+    height:100%;
+    background:#111;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:30px;
+    transition:0.3s;
+}
+
+.mobile-menu a{
+    color:white;
+    text-decoration:none;
+    font-size:20px;
+}
+
+.mobile-menu.active{
+    right:0;
+}
+
+/* HEADER */
+.header{
+    height:100vh;
+    background:url('mmm1.png') no-repeat center/cover;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:white;
+}
+
+/* CENTER IMAGE */
+.center-img{
+    width:180px;
+    margin-bottom:20px;
+}
+
+/* BUTTON */
+.enter-btn{
+    padding:12px 35px;
+    border:2px solid white;
+    border-radius:50px;
+    background:transparent;
+    color:white;
+    cursor:pointer;
+}
+
+.enter-btn:hover{
+    background:white;
+    color:black;
+}
+
+/* SEARCH BOX */
+.search-box{
+    position:fixed;
+    top:20px;
+    right:20px;
+    background:white;
+    padding:10px;
+    border-radius:30px;
+    display:none;
+}
+
+.search-box input{
+    border:none;
+    outline:none;
+}
+
+/* FOOTER */
+.footer{
+    background:#111;
+    color:white;
+    padding:40px 20px;
+    text-align:center;
+}
+
+.footer-links{
+    margin:20px 0;
+}
+
+.footer-links a{
+    color:white;
+    margin:0 10px;
+}
+
+.social i{
+    margin:0 10px;
+}
+
+.footer-buttons button{
+    margin:5px;
+    padding:10px 20px;
+    border:none;
+    background:#444;
+    color:white;
+    border-radius:20px;
+}
+
+/* 📱 MOBILE */
+@media(max-width:768px){
+
+    .nav-links{
+        display:none;
+    }
+
+    .menu-toggle{
+        display:block;
+    }
+
+    .header{
+        padding:20px;
+    }
+
+    .center-img{
+        width:150px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="home.html">Men</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <div>
+     
+        <i class="fas fa-bars menu-toggle" onclick="toggleMenu()"></i>
+    </div>
+
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="menu">
+    <a href="index.html">Home</a>
+    <a href="home.html">Men</a>
+    <a href="contact.html">Contact</a>
+</div>
+
+<!-- SEARCH BOX -->
+<div class="search-box" id="searchBox">
+    <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchContent()">
+</div>
+
+<!-- HEADER -->
+<div class="header">
+    <div>
+        <img src="logo.png" class="center-img">
+        <br>
+
+        <!-- 🔥 BUTTON UPDATED -->
+        <button class="enter-btn" onclick="goToHome()">Enter</button>
+
+    </div>
+</div>
+
+<!-- SAMPLE CONTENT -->
+<div style="padding:40px; text-align:center;">
+    <h3>Wellcome to JSP Collection.</h3>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+
+    <div class="footer-links">
+        <a href="home.html">Men</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <div class="social">
+        <i class="fab fa-facebook"></i>
+        <i class="fab fa-instagram"></i>
+        <i class="fab fa-twitter"></i>
+    </div>
+
+    <div class="footer-buttons">
+        <button>Contact</button>
+        <button>Report Problem</button>
+    </div>
+
+    <p style="margin-top:20px;">© 2026 JSP collection | Designed by Sikandar Hassan</p>
+
+</div>
+
+<script>
+
+/* MOBILE MENU */
+function toggleMenu(){
+    document.getElementById("menu").classList.toggle("active");
+}
+
+/* SEARCH */
+function toggleSearch(){
+    let box = document.getElementById("searchBox");
+    box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
+function searchContent(){
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let headings = document.querySelectorAll("h1");
+
+    headings.forEach(h=>{
+        if(h.innerText.toLowerCase().includes(input)){
+            h.style.display="block";
+        } else{
+            h.style.display="none";
+        }
+    });
+}
+
+/* 🔥 ENTER BUTTON FUNCTION */
+function goToHome(){
+    window.location.href = "home.html";
+}
+
+</script>
+
+</body>
+</html>

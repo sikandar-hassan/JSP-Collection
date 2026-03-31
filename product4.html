@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product with Order Form</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:linear-gradient(135deg,#3b0000,#7a0000,#b30000);color:white;}
+
+/* NAVBAR */
+.navbar{
+    position:fixed;
+    top:0;
+    width:100%;
+    padding:15px 20px;
+    background:transparent;
+    z-index:1000;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+.navbar .logo img{width:100px;}
+.navbar .nav-links{display:flex;gap:20px;}
+.navbar .nav-links a{color:white;text-decoration:none;}
+
+/* MOBILE MENU ICON */
+.menu-toggle{display:none;color:white;font-size:22px;cursor:pointer;}
+
+/* MOBILE SIDEBAR MENU */
+.mobile-menu{
+    position:fixed;
+    top:0;
+    right:-250px;
+    width:250px;
+    height:100%;
+    background:#1a0000;
+    padding:50px 20px;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    transition:0.3s;
+    z-index:1500;
+}
+.mobile-menu.active{right:0;}
+.mobile-menu a{color:white;text-decoration:none;font-size:18px;}
+
+/* PRODUCT SECTION */
+.product-container{
+    display:flex;
+    gap:30px;
+    padding:100px 50px 50px;
+    align-items:flex-start;
+    justify-content:center;
+    flex-wrap:wrap;
+    transition:0.3s;
+}
+.product-container.blur{filter:blur(5px);pointer-events:none;}
+
+/* THUMBNAILS */
+.thumbnails{display:flex;flex-direction:column;gap:15px;}
+.thumbnails img{width:60px;height:60px;object-fit:cover;cursor:pointer;border:2px solid transparent;border-radius:10px;transition:0.3s;}
+.thumbnails img.active{border:2px solid gold;}
+
+/* MAIN IMAGE */
+.product-img{flex:1;max-width:400px;cursor:pointer;transition:0.3s;}
+.product-img img{width:100%;border-radius:15px;transition:0.3s;}
+
+/* DETAILS */
+.product-details{flex:1;max-width:500px;}
+.product-details h1{font-family:'Poppins',sans-serif;font-size:32px;margin-bottom:10px;display:flex;align-items:center;gap:15px;}
+.tag{padding:5px 10px;border-radius:5px;background:linear-gradient(45deg,#ffd700,#ffb700);color:black;font-weight:700;box-shadow:0 0 10px #ffd700;animation: glow 2s infinite alternate;font-size:14px;}
+@keyframes glow{0%{box-shadow:0 0 5px #ffd700;}100%{box-shadow:0 0 15px #ffd700;}}
+.price{font-size:24px;color:#ffcccc;margin-bottom:15px;}
+.desc-title{font-size:16px;color:#fff;font-weight:600;margin-bottom:5px;}
+.desc{margin-bottom:20px;line-height:1.5;}
+
+/* BUTTONS */
+.buttons{display:flex;gap:15px;flex-wrap:wrap;margin-top:20px;}
+.buttons button{padding:12px 25px;border:none;border-radius:25px;background:#b30000;color:white;cursor:pointer;transition:0.3s;}
+.buttons button:hover{background:#7a0000;}
+
+/* FOOTER */
+.footer{background:#1a0000;padding:40px;text-align:center;margin-top:50px;}
+
+/* MOBILE RESPONSIVE */
+@media(max-width:768px){
+    .menu-toggle{display:block;}
+    .nav-links{display:none !important;} /* fully hide nav links on mobile */
+    .product-container{flex-direction:column;align-items:center;padding:120px 20px 50px;}
+    .thumbnails{flex-direction:row;justify-content:center;margin-bottom:15px;}
+    .thumbnails img{width:50px;height:50px;}
+    .product-img{max-width:90%;margin-bottom:20px;}
+    .product-details{max-width:90%;text-align:center;}
+    .product-details h1{font-size:24px;flex-direction:column;gap:10px;}
+    .tag{font-size:12px;padding:3px 8px;}
+    .price{font-size:20px;}
+    .desc-title{font-size:14px;}
+    .desc{font-size:14px;}
+    .buttons button{padding:10px 20px;font-size:14px;}
+}
+
+/* ORDER FORM POPUP */
+#orderPopup{
+    position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;justify-content:center;align-items:center;z-index:2000;
+}
+#orderPopup .form-container{
+    max-height:90%;
+    overflow-y:auto;
+    padding:40px 15px 60px;
+    max-width:500px;
+    margin:auto;
+    transition:0.3s;
+    background:#1a0000;
+    border-radius:12px;
+    position:relative;
+}
+#orderPopup .close-btn{
+    position:absolute;top:10px;right:15px;font-size:20px;color:white;cursor:pointer;
+}
+#orderPopup .product-img{width:100%;border-radius:12px;margin-bottom:15px;}
+#orderPopup form{display:flex;flex-direction:column;gap:12px;}
+#orderPopup input, #orderPopup textarea, #orderPopup select{padding:12px;border:none;border-radius:8px;font-size:14px;}
+#orderPopup .qty{display:flex;justify-content:center;align-items:center;margin-bottom:12px;}
+#orderPopup .qty input{width:100px;text-align:center;}
+#orderPopup .payment{display:flex;gap:10px;flex-direction:column;}
+#orderPopup .payment label{background:rgba(255,255,255,0.1);padding:10px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;}
+#orderPopup .payment input{margin-right:10px;}
+#orderPopup .jazzbox{display:none;background:rgba(255,255,255,0.1);padding:12px;border-radius:10px;}
+#orderPopup .copy{cursor:pointer;color:gold;margin-left:10px;}
+#orderPopup .submit-btn{padding:12px;background:#b30000;border:none;color:white;border-radius:25px;}
+#orderPopup .loader{position:fixed;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;justify-content:center;align-items:center;}
+#orderPopup .loader div{width:40px;height:40px;border:4px solid #fff;border-top:4px solid gold;border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{100%{transform:rotate(360deg);}}
+#orderPopup .popup{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:#1a0000;padding:20px;border-radius:12px;text-align:center;transition:0.3s;}
+#orderPopup .popup.active{transform:translate(-50%,-50%) scale(1);}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo"><img src="logo.png"></div>
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="home.html">Men</a>
+        <a href="contact.html">Contact</a>
+    </div>
+    <i class="fas fa-bars menu-toggle" onclick="toggleMenu()"></i>
+</div>
+
+<!-- MOBILE SIDEBAR MENU -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="home.html">Men</a>
+    <a href="contact.html">Contact</a>
+</div>
+
+<!-- PRODUCT -->
+<div class="product-container" id="productContainer">
+    <div class="thumbnails">
+        <img src="purple.png" class="active" onclick="changeMain(this)">
+        <img src="https://picsum.photos/500?random=2" onclick="changeMain(this)">
+        
+    </div>
+    <div class="product-img">
+        <img id="mainImage" src="purple.png">
+    </div>
+    <div class="product-details">
+        <h1>Unstiched purple soft cotton. <span class="tag">50% off sale</span></h1>
+        <div class="price">PKR 2,499</div>
+        <div class="desc-title">Product Description:</div>
+        <p class="desc">Product Details
+
+Fabric: 100% Pure Cotton
+Type: Unstitched Suit for Men
+Cutting: 4 Meter (Full Suit)
+Season: Summer Collection
+Texture: Soft & Breathable
+Colors: Multiple Elegant Options
+Care: Easy Wash & Iron, Fade Resistant
+Wear Type: Premium Wash & Wear Feel
+Offer: Flat 50% OFF
+Delivery: Cash on Delivery Available, Free Delivery.</p>
+        <div class="buttons">
+            <button onclick="openOrderForm()">Order Now</button>
+            <button>Add to Wishlist</button>
+            <button>Share</button>
+        </div>
+    </div>
+</div>
+
+<!-- ORDER FORM POPUP -->
+<div id="orderPopup">
+    <div class="form-container">
+        <span class="close-btn" onclick="closeOrderForm()">&times;</span>
+        <img src="purple.png" class="product-img">
+        <form id="orderForm">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="text" id="phone" placeholder="Phone Number" required>
+            <select id="province" required>
+                <option value="">Select Province</option>
+                <option>Punjab</option>
+                <option>Sindh</option>
+                <option>KPK</option>
+                <option>Balochistan</option>
+                <option>Islamabad</option>
+                <option>Gilgit Baltistan</option>
+                <option>Azad Kashmir</option>
+            </select>
+            <input type="text" id="city" placeholder="Your City" required>
+            <div class="qty">
+                <input type="number" id="quantity" value="1" min="1" required>
+            </div>
+            <textarea id="address" placeholder="Full Address" required></textarea>
+            <div class="payment">
+                <label><input type="radio" name="payment" value="COD" required>Cash on Delivery</label>
+                <label><input type="radio" name="payment" value="JazzCash" onclick="showJazz()">via Jazz Cash <img src="JAZZ_LOGO.png" width="60"></label>
+            </div>
+            <div class="jazzbox" id="jazzbox">
+                <p>Account Name: Javed Iqbal</p>
+                <p>Account Number: 03007614187 <i class="fas fa-copy copy" onclick="copyNum()"></i></p>
+                <input type="file" id="receipt" accept="image/*"><small>Upload payment receipt (max 1MB)</small>
+            </div>
+            <button class="submit-btn">Submit Order</button>
+        </form>
+        <div class="loader" id="loader"><div></div></div>
+        <div class="popup" id="popup"><h3>✅ Order Successful</h3><p>Delivery within 3–5 working days</p><button onclick="closePopup()">OK</button></div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer"><p>© 2026 JSP Collection</p></div>
+
+<script>
+/* MENU TOGGLE */
+function toggleMenu(){document.getElementById("mobileMenu").classList.toggle("active");}
+
+/* IMAGE SWITCH */
+let thumbnails = document.querySelectorAll(".thumbnails img");
+let mainImage = document.getElementById("mainImage");
+thumbnails.forEach(img=>{
+    img.addEventListener("click",()=>{
+        thumbnails.forEach(i=>i.classList.remove("active"));
+        img.classList.add("active");
+        mainImage.src = img.src;
+    });
+});
+
+/* OPEN / CLOSE ORDER FORM WITH BLUR */
+const productContainer = document.getElementById("productContainer");
+function openOrderForm(){
+    document.getElementById("orderPopup").style.display="flex";
+    productContainer.classList.add("blur");
+}
+function closeOrderForm(){
+    document.getElementById("orderPopup").style.display="none";
+    productContainer.classList.remove("blur");
+    document.getElementById("jazzbox").style.display="none";
+}
+
+/* SHOW JAZZ */
+function showJazz(){document.getElementById("jazzbox").style.display="block";}
+
+/* COPY */
+function copyNum(){navigator.clipboard.writeText("03007614187"); alert("Number Copied");}
+
+/* FORM SUBMIT */
+const scriptURL = "https://script.google.com/macros/s/AKfycbwm6J0xLdZOTk2vna3Lb2uhF_hhUfo2x54GE-NA--KkSa-R9Rmof1G3giTE6hD_R8ns/exec";
+const form = document.getElementById("orderForm");
+const loader = document.getElementById("loader");
+const popup = document.getElementById("popup");
+
+form.addEventListener("submit", function(e){
+    e.preventDefault();
+    let file = document.getElementById("receipt").files[0];
+    if(file && file.size > 1024*1024){alert("Max file size 1MB"); return;}
+    loader.style.display="flex";
+
+    function sendData(base64="", filename=""){
+        let data = {
+            name: document.getElementById("name").value,
+            phone: document.getElementById("phone").value,
+            province: document.getElementById("province").value,
+            city: document.getElementById("city").value,
+            quantity: document.getElementById("quantity").value,
+            address: document.getElementById("address").value,
+            payment: document.querySelector('input[name="payment"]:checked').value,
+            product: "Unstiched purple soft cotton.",
+            product_id: "P004",
+            file: base64,
+            filename: filename
+        };
+        fetch(scriptURL,{method:"POST",body:JSON.stringify(data)})
+        .then(()=>{
+            loader.style.display="none";
+            popup.classList.add("active");
+            form.reset();
+            document.getElementById("jazzbox").style.display="none";
+        })
+        .catch(()=>{loader.style.display="none";alert("Error submitting form");});
+    }
+
+    if(file){
+        let reader = new FileReader();
+        reader.onload = function(){sendData(reader.result.split(",")[1], file.name);}
+        reader.readAsDataURL(file);
+    } else {sendData();}
+});
+
+/* SUCCESS POPUP */
+function closePopup(){popup.classList.remove("active");closeOrderForm();}
+
+/* CLOSE MENU WHEN CLICK OUTSIDE */
+document.addEventListener("click", function(e){
+    let menu = document.getElementById("mobileMenu");
+    let toggle = document.querySelector(".menu-toggle");
+    if(!menu.contains(e.target) && !toggle.contains(e.target)){
+        menu.classList.remove("active");
+    }
+});
+</script>
+</body>
+</html>

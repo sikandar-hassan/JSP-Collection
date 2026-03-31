@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JSP Contact</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{
+    background:linear-gradient(135deg,#3b0000,#7a0000,#b30000);
+    color:white;
+}
+body::-webkit-scrollbar{display:none;}
+body{-ms-overflow-style:none;scrollbar-width:none;}
+
+/* NAVBAR */
+.navbar{
+    position:fixed;
+    top:0;
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    padding:15px 20px;
+    z-index:1000;
+    background:rgba(transparent);
+}
+.logo img{width:100px;}
+.nav-links{display:flex;gap:20px;}
+.nav-links a{color:white;text-decoration:none;}
+.menu-toggle{display:none;color:white;font-size:22px;cursor:pointer;}
+
+/* MOBILE MENU */
+.mobile-menu{
+    position:fixed;
+    right:-100%;
+    top:0;
+    width:70%;
+    height:100%;
+    background:#111;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:30px;
+    transition:0.3s;
+    z-index:9999;
+}
+.mobile-menu.active{right:0;}
+.mobile-menu a{color:white;text-decoration:none;font-size:20px;}
+.overlay{
+    position:fixed;
+    top:0; left:0; width:100%; height:100%;
+    background:rgba(0,0,0,0.5);
+    display:none;
+    z-index:9998;
+}
+.overlay.active{display:block;}
+
+/* CONTACT SECTION */
+.contact-container{
+    padding:150px 50px 50px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:30px;
+    max-width:800px;
+    margin:auto;
+}
+.contact-container h1{
+    font-family:'Playfair Display',serif;
+    font-size:32px;
+    margin-bottom:20px;
+}
+.contact-item{
+    width:100%;
+    background:rgba(255,255,255,0.1);
+    padding:15px 20px;
+    border-radius:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    transition:0.3s;
+}
+.contact-item:hover{
+    background:rgba(255,255,255,0.2);
+}
+.contact-item span{
+    font-size:16px;
+}
+.contact-item i{
+    cursor:pointer;
+    color:gold;
+    font-size:18px;
+    transition:0.3s;
+}
+.contact-item i:hover{
+    color:#fff;
+}
+
+/* FOOTER */
+.footer{
+    background:#1a0000;
+    padding:40px;
+    text-align:center;
+    margin-top:50px;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .menu-toggle{display:block;}
+    .nav-links{display:none;}
+    .contact-container{
+        padding:120px 20px 50px;
+    }
+    .contact-container h1{font-size:24px;}
+    .contact-item span{font-size:14px;}
+    .contact-item i{font-size:16px;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo"><img src="logo.png"></div>
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="home.html">Men</a>
+        
+        <a href="contact.html">Contact</a>
+    </div>
+    <div>
+        <i class="fas fa-search"></i>
+        <i class="fas fa-bars menu-toggle" onclick="toggleMenu()"></i>
+    </div>
+</div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="menu">
+    <a href="index.html">Home</a>
+    <a href="home.html">Men</a>
+  
+    <a href="contact.html">Contact</a>
+</div>
+
+<!-- CONTACT DETAILS -->
+<div class="contact-container">
+    <h1>Contact Details</h1>
+
+    <div class="contact-item">
+        <span>Manager: Mubeen Jawaid</span>
+        <i class="fas fa-copy" onclick="copyText(this)"></i>
+    </div>
+
+    <div class="contact-item">
+        <span>Phone Number: +92 3291380233</span>
+        <i class="fas fa-copy" onclick="copyText(this)"></i>
+    </div>
+
+    <div class="contact-item">
+        <span>Email: mobeen233gb@gmail.com</span>
+        <i class="fas fa-copy" onclick="copyText(this)"></i>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    <p>© 2026 JSP Collection</p>
+</div>
+
+<script>
+/* MENU */
+function toggleMenu(){
+    document.getElementById("menu").classList.toggle("active");
+    document.getElementById("overlay").classList.toggle("active");
+}
+
+/* COPY TO CLIPBOARD */
+function copyText(el){
+    let text = el.previousElementSibling.textContent;
+    navigator.clipboard.writeText(text).then(()=>{
+        el.style.color = "#fff"; // briefly indicate copy
+        setTimeout(()=>{el.style.color="gold";},500);
+    });
+}
+</script>
+
+</body>
+</html>
